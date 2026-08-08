@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
-import { addGoal, updateSavedAmount } from './actions'
+import { addGoal, updateSavedAmount, deleteGoal } from './actions'
 import NavBar from '@/app/components/NavBar'
 
 function ProgressBar({ saved, target }) {
@@ -39,19 +39,27 @@ export default async function Vault713Page() {
                 <span className="text-sm">₹{g.saved_amount} / ₹{g.target_amount}</span>
               </div>
               <ProgressBar saved={g.saved_amount} target={g.target_amount} />
-              <form action={updateSavedAmount} className="mt-3 flex gap-2">
-                <input type="hidden" name="goal_id" value={g.id} />
-                <input
-                  name="saved_amount"
-                  type="number"
-                  step="0.01"
-                  defaultValue={g.saved_amount}
-                  className="w-32 rounded bg-black/30 px-3 py-1 text-sm"
-                />
-                <button type="submit" className="rounded bg-[var(--house-accent)]/80 px-3 py-1 text-sm font-semibold text-[var(--house-bg)]">
-                  Update
-                </button>
-              </form>
+              <div className="mt-3 flex items-center gap-2">
+                <form action={updateSavedAmount} className="flex gap-2">
+                  <input type="hidden" name="goal_id" value={g.id} />
+                  <input
+                    name="saved_amount"
+                    type="number"
+                    step="0.01"
+                    defaultValue={g.saved_amount}
+                    className="w-32 rounded bg-black/30 px-3 py-1 text-sm"
+                  />
+                  <button type="submit" className="rounded bg-[var(--house-accent)]/80 px-3 py-1 text-sm font-semibold text-[var(--house-bg)]">
+                    Update
+                  </button>
+                </form>
+                <form action={deleteGoal}>
+                  <input type="hidden" name="goal_id" value={g.id} />
+                  <button type="submit" className="rounded border border-red-400/50 px-3 py-1 text-sm text-red-400 hover:bg-red-400/10">
+                    Delete
+                  </button>
+                </form>
+              </div>
             </div>
           ))}
         </div>

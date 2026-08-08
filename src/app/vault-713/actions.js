@@ -35,3 +35,19 @@ export async function updateSavedAmount(formData) {
 
   revalidatePath('/vault-713')
 }
+
+export async function deleteGoal(formData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  const goalId = formData.get('goal_id')
+
+  await supabase
+    .from('savings_goals')
+    .delete()
+    .eq('id', goalId)
+    .eq('user_id', user.id)
+
+  revalidatePath('/vault-713')
+}
