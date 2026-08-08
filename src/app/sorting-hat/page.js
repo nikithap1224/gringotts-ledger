@@ -42,7 +42,7 @@ const QUESTIONS = [
     ],
   },
   {
-    q: 'A talent you'd want:',
+    q: "A talent you'd want:",
     options: [
       { text: 'Fearlessness', house: 'gryffindor' },
       { text: 'Persuasion', house: 'slytherin' },
