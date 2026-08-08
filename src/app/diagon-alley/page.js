@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { toGalleons } from '@/lib/wizard'
-import { addTransaction } from './actions'
+import { addTransaction, deleteTransaction } from './actions'
 import NavBar from '@/app/components/NavBar'
 
 export default async function DiagonAlleyPage() {
@@ -36,7 +36,7 @@ export default async function DiagonAlleyPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left text-[var(--house-accent)]">
-              <th className="pb-2">Date</th><th>Item</th><th>Category</th><th>Amount</th><th>Galleons</th>
+              <th className="pb-2">Date</th><th>Item</th><th>Category</th><th>Amount</th><th>Galleons</th><th></th>
             </tr>
           </thead>
           <tbody>
@@ -49,6 +49,12 @@ export default async function DiagonAlleyPage() {
                   {t.type === 'income' ? '+' : '-'}₹{t.amount}
                 </td>
                 <td>{toGalleons(t.amount)} 🪙</td>
+                <td>
+                  <form action={deleteTransaction}>
+                    <input type="hidden" name="transaction_id" value={t.id} />
+                    <button type="submit" className="text-xs text-red-400 hover:underline">Delete</button>
+                  </form>
+                </td>
               </tr>
             ))}
           </tbody>

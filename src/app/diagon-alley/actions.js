@@ -19,3 +19,20 @@ export async function addTransaction(formData) {
   revalidatePath('/diagon-alley')
   revalidatePath('/dashboard')
 }
+
+export async function deleteTransaction(formData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  const transactionId = formData.get('transaction_id')
+
+  await supabase
+    .from('transactions')
+    .delete()
+    .eq('id', transactionId)
+    .eq('user_id', user.id)
+
+  revalidatePath('/diagon-alley')
+  revalidatePath('/dashboard')
+}
