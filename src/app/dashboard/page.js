@@ -31,7 +31,7 @@ export default async function DashboardPage() {
     good: 'text-emerald-400',
     warn: 'text-yellow-400',
     danger: 'text-red-400',
-    neutral: 'text-[#E8D9A0]',
+    neutral: 'text-[var(--house-text)]',
   }[status.tone]
 
   const chartData = categories?.map((c) => ({
@@ -40,17 +40,17 @@ export default async function DashboardPage() {
   })) || []
 
   return (
-    <main className="mx-auto max-w-4xl p-6 text-[#E8D9A0]">
+    <main className="mx-auto max-w-4xl p-6 text-[var(--house-text)]">
       <h1 className="mb-2 font-serif text-3xl">The Sorting Hat Dashboard</h1>
       <p className={`mb-6 text-lg font-semibold ${toneColor}`}>{status.message}</p>
 
       <div className="mb-8 grid grid-cols-2 gap-4">
-        <div className="rounded-lg border border-[#C9A227]/30 p-4">
-          <p className="text-sm text-[#C9A227]">This Month&apos;s Spending</p>
+        <div className="rounded-lg border border-[var(--house-accent)]/30 p-4">
+          <p className="text-sm text-[var(--house-accent)]">This Month&apos;s Spend</p>
           <p className="text-2xl font-bold">₹{totalSpent.toFixed(2)}</p>
         </div>
-        <div className="rounded-lg border border-[#C9A227]/30 p-4">
-          <p className="text-sm text-[#C9A227]">Total Monthly Budget</p>
+        <div className="rounded-lg border border-[var(--house-accent)]/30 p-4">
+          <p className="text-sm text-[var(--house-accent)]">Total Monthly Budget</p>
           <p className="text-2xl font-bold">₹{totalBudget.toFixed(2)}</p>
         </div>
       </div>
@@ -64,14 +64,14 @@ export default async function DashboardPage() {
           const budget = Number(c.monthly_budget)
           const pct = budget > 0 ? Math.min(100, (spent / budget) * 100) : 0
           return (
-            <div key={c.id} className="rounded-lg border border-[#C9A227]/30 p-3">
+            <div key={c.id} className="rounded-lg border border-[var(--house-accent)]/30 p-3">
               <div className="mb-1 flex justify-between text-sm">
                 <span>{c.icon} {c.name}</span>
                 <span>₹{spent.toFixed(2)} / ₹{budget.toFixed(2)}</span>
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-black/30">
                 <div
-                  className={`h-full ${pct >= 100 ? 'bg-red-500' : pct >= 80 ? 'bg-yellow-500' : 'bg-[#C9A227]'}`}
+                  className={`h-full ${pct >= 100 ? 'bg-red-500' : pct >= 80 ? 'bg-yellow-500' : 'bg-[var(--house-accent)]'}`}
                   style={{ width: `${pct}%` }}
                 />
               </div>

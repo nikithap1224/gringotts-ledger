@@ -6,3 +6,8 @@
   --house-bg: #1A0E0E;
   --house-text: #F5E6C8;
 }
+
+body {
+  background-color: var(--house-bg);
+  color: var(--house-text);
+}
