@@ -13,6 +13,7 @@ function ProgressBar({ saved, target }) {
 
 export default async function Vault713Page() {
   const supabase = await createClient()
+
   const { data: goals } = await supabase
     .from('savings_goals')
     .select('*')
@@ -23,7 +24,16 @@ export default async function Vault713Page() {
     .select('*')
     .order('deposit_date', { ascending: false })
 
+  const { data: transactions } = await supabase
+    .from('transactions')
+    .select('type, amount')
+
+  const totalIncome = transactions?.filter(t => t.type === 'income').reduce((sum, t) => sum + Number(t.amount), 0) || 0
+  const totalExpense = transactions?.filter(t => t.type === 'expense').reduce((sum, t) => sum + Number(t.amount), 0) || 0
+  const balance = totalIncome - totalExpense
   const totalSaved = deposits?.reduce((sum, d) => sum + Number(d.amount), 0) || 0
+  const freeBalance = balance - totalSaved
+
   const today = new Date().toISOString().slice(0, 10)
 
   return (
@@ -31,6 +41,30 @@ export default async function Vault713Page() {
       <NavBar />
       <main className="mx-auto max-w-3xl p-6 text-[var(--house-text)]">
         <h1 className="mb-6 font-serif text-3xl">Vault 713</h1>
+
+        {/* Balance overview */}
+        <div className="mb-4 grid grid-cols-2 gap-4 md:grid-cols-4">
+          <div className="rounded-lg border border-[var(--house-accent)]/30 p-4">
+            <p className="text-sm text-[var(--house-accent)]">Vault Balance</p>
+            <p className={`text-2xl font-bold ${balance < 0 ? 'text-red-400' : ''}`}>₹{balance.toFixed(2)}</p>
+          </div>
+          <div className="rounded-lg border border-[var(--house-accent)]/30 p-4">
+            <p className="text-sm text-[var(--house-accent)]">Total Income</p>
+            <p className="text-xl font-semibold text-emerald-400">₹{totalIncome.toFixed(2)}</p>
+          </div>
+          <div className="rounded-lg border border-[var(--house-accent)]/30 p-4">
+            <p className="text-sm text-[var(--house-accent)]">Total Spent</p>
+            <p className="text-xl font-semibold text-red-400">₹{totalExpense.toFixed(2)}</p>
+          </div>
+          <div className="rounded-lg border border-[var(--house-accent)]/30 p-4">
+            <p className="text-sm text-[var(--house-accent)]">Set Aside as Savings</p>
+            <p className="text-xl font-semibold text-[var(--house-accent)]">₹{totalSaved.toFixed(2)}</p>
+          </div>
+        </div>
+
+        <p className="mb-8 text-sm text-[var(--house-text)]/70">
+          Free balance (not yet earmarked): <span className="font-semibold">₹{freeBalance.toFixed(2)}</span>
+        </p>
 
         {/* Savings Log */}
         <div className="mb-10 rounded-lg border border-[var(--house-accent)]/30 p-4">
