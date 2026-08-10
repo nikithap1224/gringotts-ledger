@@ -9,6 +9,7 @@ export default async function DiagonAlleyPage() {
   const { data: transactions } = await supabase
     .from('transactions')
     .select('*, categories(name, icon)')
+    .eq('archived', false)
     .order('transaction_date', { ascending: false })
     .limit(50)
 

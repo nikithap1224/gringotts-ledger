@@ -17,6 +17,7 @@ export default async function DashboardPage() {
     .from('transactions')
     .select('*')
     .eq('type', 'expense')
+    .eq('archived', false)
     .gte('transaction_date', startDateStr)
 
   const spendByCategory = {}
