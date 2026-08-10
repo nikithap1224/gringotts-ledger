@@ -14,6 +14,7 @@ export async function addTransaction(formData) {
     type: formData.get('type'),
     amount: Number(formData.get('amount')),
     description: formData.get('description'),
+    transaction_date: formData.get('transaction_date'),
   })
 
   revalidatePath('/diagon-alley')

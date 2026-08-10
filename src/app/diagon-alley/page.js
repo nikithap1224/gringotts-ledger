@@ -12,6 +12,8 @@ export default async function DiagonAlleyPage() {
     .order('transaction_date', { ascending: false })
     .limit(50)
 
+  const today = new Date().toISOString().slice(0, 10)
+
   return (
     <>
       <NavBar />
@@ -30,7 +32,8 @@ export default async function DiagonAlleyPage() {
             <option value="income">Income</option>
           </select>
           <input name="amount" type="number" step="0.01" placeholder="Amount (₹)" required className="rounded bg-black/30 px-3 py-2" />
-          <button type="submit" className="rounded bg-[var(--house-accent)] px-3 py-2 font-semibold text-[var(--house-bg)]">Add Entry</button>
+          <input name="transaction_date" type="date" defaultValue={today} required className="rounded bg-black/30 px-3 py-2" />
+          <button type="submit" className="col-span-2 rounded bg-[var(--house-accent)] px-3 py-2 font-semibold text-[var(--house-bg)]">Add Entry</button>
         </form>
 
         <table className="w-full text-sm">
