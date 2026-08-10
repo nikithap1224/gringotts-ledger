@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { houseStatus } from '@/lib/wizard'
 import { SpendingChart } from './SpendingChart'
+import { updateBudget } from './actions'
 import NavBar from '@/app/components/NavBar'
 
 export default async function DashboardPage() {
@@ -36,10 +37,10 @@ export default async function DashboardPage() {
   }[status.tone]
 
   const chartData = categories?.map((c) => ({
-  name: c.name.length > 12 ? c.name.split(' ').map(w => w[0]).join('') : c.name,
-  fullName: c.name,
-  amount: spendByCategory[c.id] || 0,
-})) || []
+    name: c.name.length > 12 ? c.name.split(' ').map(w => w[0]).join('') : c.name,
+    fullName: c.name,
+    amount: spendByCategory[c.id] || 0,
+  })) || []
 
   return (
     <>
@@ -73,12 +74,26 @@ export default async function DashboardPage() {
                   <span>{c.icon} {c.name}</span>
                   <span>₹{spent.toFixed(2)} / ₹{budget.toFixed(2)}</span>
                 </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-black/30">
+                <div className="mb-2 h-2 w-full overflow-hidden rounded-full bg-black/30">
                   <div
                     className={`h-full ${pct >= 100 ? 'bg-red-500' : pct >= 80 ? 'bg-yellow-500' : 'bg-[var(--house-accent)]'}`}
                     style={{ width: `${pct}%` }}
                   />
                 </div>
+                <form action={updateBudget} className="flex gap-2">
+                  <input type="hidden" name="category_id" value={c.id} />
+                  <input
+                    name="monthly_budget"
+                    type="number"
+                    step="0.01"
+                    defaultValue={c.monthly_budget}
+                    placeholder="Set budget (₹)"
+                    className="w-32 rounded bg-black/30 px-2 py-1 text-xs"
+                  />
+                  <button type="submit" className="rounded bg-[var(--house-accent)]/80 px-2 py-1 text-xs font-semibold text-[var(--house-bg)]">
+                    Set
+                  </button>
+                </form>
               </div>
             )
           })}
