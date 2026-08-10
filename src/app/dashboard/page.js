@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { houseStatus } from '@/lib/wizard'
 import { SpendingChart } from './SpendingChart'
-import { updateBudget } from './actions'
+import BudgetEditor from './BudgetEditor'
 import NavBar from '@/app/components/NavBar'
 
 export default async function DashboardPage() {
@@ -80,20 +80,7 @@ export default async function DashboardPage() {
                     style={{ width: `${pct}%` }}
                   />
                 </div>
-                <form action={updateBudget} className="flex gap-2">
-                  <input type="hidden" name="category_id" value={c.id} />
-                  <input
-                    name="monthly_budget"
-                    type="number"
-                    step="0.01"
-                    defaultValue={c.monthly_budget}
-                    placeholder="Set budget (₹)"
-                    className="w-32 rounded bg-black/30 px-2 py-1 text-xs"
-                  />
-                  <button type="submit" className="rounded bg-[var(--house-accent)]/80 px-2 py-1 text-xs font-semibold text-[var(--house-bg)]">
-                    Set
-                  </button>
-                </form>
+                <BudgetEditor categoryId={c.id} budget={c.monthly_budget} />
               </div>
             )
           })}
