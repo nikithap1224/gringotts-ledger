@@ -36,9 +36,10 @@ export default async function DashboardPage() {
   }[status.tone]
 
   const chartData = categories?.map((c) => ({
-    name: c.name,
-    amount: spendByCategory[c.id] || 0,
-  })) || []
+  name: c.name.length > 12 ? c.name.split(' ').map(w => w[0]).join('') : c.name,
+  fullName: c.name,
+  amount: spendByCategory[c.id] || 0,
+})) || []
 
   return (
     <>
