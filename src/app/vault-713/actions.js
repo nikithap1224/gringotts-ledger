@@ -41,12 +41,39 @@ export async function deleteGoal(formData) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
 
-  const goalId = formData.get('goal_id')
-
   await supabase
     .from('savings_goals')
     .delete()
-    .eq('id', goalId)
+    .eq('id', formData.get('goal_id'))
+    .eq('user_id', user.id)
+
+  revalidatePath('/vault-713')
+}
+
+export async function addDeposit(formData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  await supabase.from('vault_deposits').insert({
+    user_id: user.id,
+    amount: Number(formData.get('amount')),
+    note: formData.get('note'),
+    deposit_date: formData.get('deposit_date'),
+  })
+
+  revalidatePath('/vault-713')
+}
+
+export async function deleteDeposit(formData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  await supabase
+    .from('vault_deposits')
+    .delete()
+    .eq('id', formData.get('deposit_id'))
     .eq('user_id', user.id)
 
   revalidatePath('/vault-713')
